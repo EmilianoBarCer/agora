@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'empleado_form_screen.dart';
 import 'empleado_list_screen.dart';
+import 'alumno_form_screen.dart';
+import 'alumno_list_screen.dart';
+import 'profesor_form_screen.dart';
+import 'profesor_list_screen.dart';
 import 'package:agora/features/auth/login_screen.dart';
-
+import 'libro_form_screen.dart';
+import 'libro_list_screen.dart';
 
 class MainScreen extends StatelessWidget {
   final String username;
@@ -50,8 +55,7 @@ class MainScreen extends StatelessWidget {
                 const SizedBox(width: 16),
                 TextButton.icon(
                   onPressed: () => Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                        builder: (_) => const _LoginRedirect()),
+                    MaterialPageRoute(builder: (_) => const _LoginRedirect()),
                   ),
                   icon: const Icon(Icons.logout_rounded,
                       color: Color(0xFFFFC107), size: 18),
@@ -67,57 +71,69 @@ class MainScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          // Barra de menú
           Container(
             color: const Color(0xFF1A3A6B),
             child: Row(
               children: [
                 _MenuButton(
                   label: 'EMPLEADOS',
-                  items: const [
-                    'Registrar',
-                    'Consulta individual',
-                    'Consulta general',
-                    'Cambiar',
-                    'Eliminar',
-                  ],
+                  items: const ['Registrar', 'Consulta individual', 'Consulta general', 'Cambiar', 'Eliminar'],
                   onSelected: (item) {
                     switch (item) {
                       case 'Registrar':
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const EmpleadoFormScreen()),
-                        );
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => const EmpleadoFormScreen()));
                         break;
                       case 'Consulta general':
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const EmpleadoListScreen()),
-                        );
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => const EmpleadoListScreen()));
                         break;
-                    // los demás los implementamos después
                     }
                   },
                 ),
-                _MenuButton(label: 'PROFESORES',
-                    items: const['Registrar',
-                      'Consulta_individual',
-                      'Consulta_general',
-                      'Cambiar',
-                      'Eliminar'],
-                    onSelected: (item){
-                  switch(item){
-                    case######################################################
-                        ######################################################
-                  }
+                _MenuButton(
+                  label: 'ALUMNOS',
+                  items: const ['Registrar', 'Consulta individual', 'Consulta general', 'Cambiar', 'Eliminar'],
+                  onSelected: (item) {
+                    switch (item) {
+                      case 'Registrar':
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => const AlumnoFormScreen()));
+                        break;
+                      case 'Consulta general':
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => const AlumnoListScreen()));
+                        break;
                     }
+                  },
+                ),
+                _MenuButton(
+                  label: 'PROFESORES',
+                  items: const ['Registrar', 'Consulta individual', 'Consulta general', 'Cambiar', 'Eliminar'],
+                  onSelected: (item) {
+                    switch (item) {
+                      case 'Registrar':
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfesorFormScreen()));
+                        break;
+                      case 'Consulta general':
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfesorListScreen()));
+                        break;
+                    }
+                  },
+                ),
+                _MenuButton(
+                  label: 'LIBROS',
+                  items: const ['Registrar', 'Consulta individual', 'Consulta general', 'Cambiar', 'Eliminar'],
+                  onSelected: (item) {
+                    switch (item) {
+                      case 'Registrar':
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => const LibroFormScreen()));
+                        break;
+                      case 'Consulta general':
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => const LibroListScreen()));
+                        break;
+                    }
+                  },
+                ),
               ],
             ),
           ),
-
-          // Contenido principal
           Expanded(
             child: Center(
               child: Column(
@@ -150,8 +166,6 @@ class MainScreen extends StatelessWidget {
     );
   }
 }
-
-// ─── Botón de menú con dropdown ──────────────────────────────────────────────
 
 class _MenuButton extends StatelessWidget {
   final String label;
@@ -198,8 +212,6 @@ class _MenuButton extends StatelessWidget {
     );
   }
 }
-
-// ─── Redirect al login al cerrar sesión ──────────────────────────────────────
 
 class _LoginRedirect extends StatelessWidget {
   const _LoginRedirect();
