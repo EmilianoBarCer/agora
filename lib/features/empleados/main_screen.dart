@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'empleado_form_screen.dart';
 import 'empleado_list_screen.dart';
+import 'alumno_form_screen.dart';
+import 'alumno_list_screen.dart';
+import 'profesor_form_screen.dart';
+import 'profesor_list_screen.dart';
+import 'libro_form_screen.dart';
+import 'libro_list_screen.dart';
 import 'package:agora/features/auth/login_screen.dart';
 
 class MainScreen extends StatelessWidget {
@@ -49,6 +55,7 @@ class MainScreen extends StatelessWidget {
                 const SizedBox(width: 16),
                 TextButton.icon(
                   onPressed: () => Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (_) => const LoginScreen()),
                   ),
                   icon: const Icon(Icons.logout_rounded,
                       color: Color(0xFFFFC107), size: 18),
@@ -70,19 +77,60 @@ class MainScreen extends StatelessWidget {
               children: [
                 _MenuButton(
                   label: 'EMPLEADOS',
+                  items: const ['Registrar', 'Consulta individual', 'Consulta general', 'Cambiar', 'Eliminar'],
                   onSelected: (item) {
                     switch (item) {
                       case 'Registrar':
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => const EmpleadoFormScreen()));
                         break;
                       case 'Consulta general':
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => const EmpleadoListScreen()));
                         break;
                     }
                   },
                 ),
+                _MenuButton(
+                  label: 'ALUMNOS',
+                  items: const ['Registrar', 'Consulta individual', 'Consulta general', 'Cambiar', 'Eliminar'],
                   onSelected: (item) {
                     switch (item) {
+                      case 'Registrar':
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => const AlumnoFormScreen()));
+                        break;
+                      case 'Consulta general':
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => const AlumnoListScreen()));
+                        break;
                     }
+                  },
+                ),
+                _MenuButton(
+                  label: 'PROFESORES',
+                  items: const ['Registrar', 'Consulta individual', 'Consulta general', 'Cambiar', 'Eliminar'],
+                  onSelected: (item) {
+                    switch (item) {
+                      case 'Registrar':
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfesorFormScreen()));
+                        break;
+                      case 'Consulta general':
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfesorListScreen()));
+                        break;
                     }
+                  },
+                ),
+                _MenuButton(
+                  label: 'LIBROS',
+                  items: const ['Registrar', 'Consulta individual', 'Consulta general', 'Cambiar', 'Eliminar'],
+                  onSelected: (item) {
+                    switch (item) {
+                      case 'Registrar':
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => const LibroFormScreen()));
+                        break;
+                      case 'Consulta general':
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => const LibroListScreen()));
+                        break;
+                    }
+                  },
+                ),
               ],
             ),
           ),
@@ -162,14 +210,5 @@ class _MenuButton extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class _LoginRedirect extends StatelessWidget {
-  const _LoginRedirect();
-
-  @override
-  Widget build(BuildContext context) {
-    return const LoginScreen();
   }
 }
