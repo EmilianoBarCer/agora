@@ -31,6 +31,8 @@ dependencies:
   flutter:
     sdk: flutter
   postgres: ^2.6.2
+  pdf: ^3.10.8
+  mailer: ^6.0.0
   #CONECTAMOS POSTGRES CON FLUTTER CON ESTA LINEA EN EL PUBSPEC.YAML DEL PROYECTO
 
 
