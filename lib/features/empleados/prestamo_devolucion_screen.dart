@@ -241,7 +241,11 @@ class _PrestamoDevolucionScreenState extends State<PrestamoDevolucionScreen> {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF0D2347))),
                 const SizedBox(height: 8),
                 const Text(
+<<<<<<< HEAD
                   'Si la devolución es después de la fecha límite se generará una multa de \$5/día para alumnos y \$10/día para profesores.',
+=======
+                  'Si la devolución es después de la fecha límite se generará una multa de \$5 por día.',
+>>>>>>> 0b6578e02d0ac9068d0a4d3a35450ab6c0f4d516
                   style: TextStyle(fontSize: 13, color: Color(0xFF8E8EA0)),
                 ),
                 const SizedBox(height: 24),
