@@ -39,7 +39,8 @@ class _PrestamoDevolucionScreenState extends State<PrestamoDevolucionScreen> {
         'SELECT p.id_prestamo, p.solicitante, p.isbn, p.num_ejemplar, '
             'p.fecha_limite, l.titulo, l.autores, '
             'COALESCE(pr.correo, al.correo) as correo, '
-            'COALESCE(pr.nombre, al.nombre) as nombre '
+            'COALESCE(pr.nombre, al.nombre) as nombre, '
+            'pr.codigo as codigo_profesor '
             'FROM prestamo p '
             'LEFT JOIN libro l ON l.isbn = p.isbn AND l.num_ejemplar = p.num_ejemplar '
             'LEFT JOIN profesor pr ON pr.codigo = p.solicitante '
@@ -59,7 +60,9 @@ class _PrestamoDevolucionScreenState extends State<PrestamoDevolucionScreen> {
       final fechaLimiteSolo = DateTime(fechaLimite.year, fechaLimite.month, fechaLimite.day);
       final fechaDevolucionSolo = DateTime(fechaDevol.year, fechaDevol.month, fechaDevol.day);
       final diasRetraso     = fechaDevolucionSolo.difference(fechaLimiteSolo).inDays;
-      final multa           = diasRetraso > 0 ? diasRetraso * 5.0 : 0.0;
+      final esProfesor      = row[9] != null;
+      final multaPorDia     = esProfesor ? 10.0 : 5.0;
+      final multa           = diasRetraso > 0 ? diasRetraso * multaPorDia : 0.0;
       final titulo          = row[5].toString();
       final autores         = row[6].toString();
       final correo          = row[7].toString();
@@ -96,7 +99,7 @@ class _PrestamoDevolucionScreenState extends State<PrestamoDevolucionScreen> {
                 pw.Text('Fecha devolución: $fecha'),
                 pw.Text('Días de retraso: $diasRetraso'),
                 pw.SizedBox(height: 12),
-                pw.Text('Multa por día: \$5.00'),
+                pw.Text('Multa por día: \$$multaPorDia (${esProfesor ? 'Profesor' : 'Alumno'})'),
                 pw.Divider(),
                 pw.Text('TOTAL A PAGAR: \$$multa',
                     style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold)),
@@ -238,7 +241,11 @@ class _PrestamoDevolucionScreenState extends State<PrestamoDevolucionScreen> {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF0D2347))),
                 const SizedBox(height: 8),
                 const Text(
+<<<<<<< HEAD
+                  'Si la devolución es después de la fecha límite se generará una multa de \$5/día para alumnos y \$10/día para profesores.',
+=======
                   'Si la devolución es después de la fecha límite se generará una multa de \$5 por día.',
+>>>>>>> 0b6578e02d0ac9068d0a4d3a35450ab6c0f4d516
                   style: TextStyle(fontSize: 13, color: Color(0xFF8E8EA0)),
                 ),
                 const SizedBox(height: 24),
