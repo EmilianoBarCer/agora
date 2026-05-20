@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'features/auth/login_screen.dart';
+import 'splash_screen.dart';
+
 
 void main() {
   runApp(const AgoraApp());
@@ -17,7 +18,7 @@ class AgoraApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1A3A6B)),
         useMaterial3: true,
       ),
-      home: const LoginScreen(),
+      home: const SplashScreen(),
     );
   }
 }

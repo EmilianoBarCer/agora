@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
+import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import '../../core/db_connection.dart';
 
@@ -59,11 +60,19 @@ class _PrestamoDevolucionScreenState extends State<PrestamoDevolucionScreen> {
       final fechaLimiteSolo = DateTime(fechaLimite.year, fechaLimite.month, fechaLimite.day);
       final fechaDevolucionSolo = DateTime(fechaDevol.year, fechaDevol.month, fechaDevol.day);
       final diasRetraso     = fechaDevolucionSolo.difference(fechaLimiteSolo).inDays;
-      final multa           = diasRetraso > 0 ? diasRetraso * 5.0 : 0.0;
       final titulo          = row[5].toString();
       final autores         = row[6].toString();
       final correo          = row[7].toString();
       final nombre          = row[8].toString();
+
+      // Determinar tipo de solicitante y multa por día
+      final esProfesor = await conn.query(
+        'SELECT codigo FROM profesor WHERE codigo = @s',
+        substitutionValues: {'s': row[1].toString()},
+      );
+      final multaPorDia = esProfesor.isNotEmpty ? 10.0 : 5.0;
+      final multa       = diasRetraso > 0 ? diasRetraso * multaPorDia : 0.0;
+      final tipoSolicitante = esProfesor.isNotEmpty ? 'Profesor' : 'Alumno';
 
       await conn.query(
         'UPDATE prestamo SET fecha_devolucion = @fd, estatus = @es, multa = @m '
@@ -90,13 +99,17 @@ class _PrestamoDevolucionScreenState extends State<PrestamoDevolucionScreen> {
                 pw.Divider(),
                 pw.SizedBox(height: 12),
                 pw.Text('Solicitante: $nombre'),
+                pw.Text('Tipo: $tipoSolicitante'),
                 pw.Text('Libro: $titulo'),
                 pw.Text('Autores: $autores'),
                 pw.Text('Fecha límite: ${fechaLimite.toIso8601String().split('T')[0]}'),
                 pw.Text('Fecha devolución: $fecha'),
                 pw.Text('Días de retraso: $diasRetraso'),
                 pw.SizedBox(height: 12),
-                pw.Text('Multa por día: \$5.00'),
+                pw.Text('Multa por día: \$$multaPorDia ($tipoSolicitante)',
+                    style: pw.TextStyle(fontSize: 10, color: PdfColors.grey600)),
+                pw.Text('Nota: profesores pagan \$10.00 por día, alumnos \$5.00 por día.',
+                    style: pw.TextStyle(fontSize: 10, color: PdfColors.grey600)),
                 pw.Divider(),
                 pw.Text('TOTAL A PAGAR: \$$multa',
                     style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold)),
@@ -129,6 +142,7 @@ class _PrestamoDevolucionScreenState extends State<PrestamoDevolucionScreen> {
                 pw.Divider(),
                 pw.SizedBox(height: 12),
                 pw.Text('Solicitante: $nombre'),
+                pw.Text('Tipo: $tipoSolicitante'),
                 pw.Text('Libro: $titulo'),
                 pw.Text('Autores: $autores'),
                 pw.Text('Fecha límite: ${fechaLimite.toIso8601String().split('T')[0]}'),
@@ -137,6 +151,9 @@ class _PrestamoDevolucionScreenState extends State<PrestamoDevolucionScreen> {
                 pw.Divider(),
                 pw.Text('ENTREGA EN TIEMPO Y FORMA. SIN MULTA.',
                     style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(height: 8),
+                pw.Text('Nota: en caso de retraso, profesores pagan \$10.00 por día y alumnos \$5.00 por día.',
+                    style: pw.TextStyle(fontSize: 10, color: PdfColors.grey600)),
               ],
             ),
           ),
@@ -238,7 +255,7 @@ class _PrestamoDevolucionScreenState extends State<PrestamoDevolucionScreen> {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF0D2347))),
                 const SizedBox(height: 8),
                 const Text(
-                  'Si la devolución es después de la fecha límite se generará una multa de \$5 por día.',
+                  'Profesores: \$10.00 por día de retraso. Alumnos: \$5.00 por día de retraso.',
                   style: TextStyle(fontSize: 13, color: Color(0xFF8E8EA0)),
                 ),
                 const SizedBox(height: 24),
